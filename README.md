@@ -28,14 +28,14 @@ Linux version of [iStat][istat].
 Features
 --------
 
-- [ ] Server:
-  - [ ] Monitor items
-  - [ ] Save them in SQLite database
+- [X] Server:
+  - [X] Monitor items
+  - [X] Save them in SQLite database
   - [ ] TOML configuration file
   - [ ] Customizable items
   - [ ] Customizable retention policy
   - [ ] Customizable saving interval
-- [ ] Simple query client:
+- [X] Simple query client:
   - [ ] Query server for a given item
   - [ ] Customizable answer format
 - [ ] Curses client:

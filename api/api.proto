@@ -1,0 +1,72 @@
+syntax = "proto3";
+package api;
+
+/*
+ Services
+*/
+
+service Cpu {
+    // Simple requests: ask for global cpu status.
+	rpc GetCpuInfo(StatusRequest) returns (CpuInfo) {}
+	rpc GetAdvancedCpuInfo(StatusRequest) returns (AdvancedCpuInfo) {}
+
+    // Advanced requets: ask per core/thread.
+	rpc GetCoreInfo(CoreStatusRequest) returns (CpuInfo) {}
+	rpc GetAdvancedCoreInfo(CoreStatusRequest) returns (AdvancedCpuInfo) {}
+}
+
+service Ram {
+	rpc GetRamInfo(StatusRequest) returns (RamInfo) {}
+	rpc GetAdvancedRamInfo(StatusRequest) returns (AdvancedRamInfo) {}
+}
+
+/*
+ Messages
+*/
+
+// Empty message for simple requests.
+message StatusRequest {}
+
+/* CPU related messages. */
+
+enum CpuType {
+    COMBINED = 0;
+    PHYSICAL_CORE = 1;
+    LOGICAL_CORE = 2;
+}
+
+// If CpuType is COMBINED, id is ignored.
+message CoreStatusRequest {
+    CpuType type = 1;
+    uint32 id = 2;
+}
+
+message CpuInfo {
+    bool available = 1;
+    CpuType cpu_type = 2;
+	double used_percent = 3;
+	double frequency = 4;
+}
+
+message AdvancedCpuInfo {
+    bool available = 1;
+    CpuType cpu_type = 2;
+    double used_percent = 3;
+    double frequency = 4;
+    string microcode = 5;
+}
+
+/* RAM related messages. */
+
+message RamInfo {
+	double used_percent = 1;
+	uint64 total = 2;
+	uint64 used = 3;
+}
+
+message AdvancedRamInfo {
+	double used_percent = 1;
+	uint64 total = 2;
+	uint64 used = 3;
+	uint64 cached = 4;
+}
