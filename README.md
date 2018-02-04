@@ -25,14 +25,46 @@ which are battle-tested and available for free. Think more of Opale as the
 Linux version of [iStat][istat].
 
 
+Required Elements to Operate
+----------------------------
+
+- [X] Data loading
+- [X] SQLite saving
+- [X] gRPC communication
+- [X] TOML configuration file
+- [ ] Use XDG path
+- [ ] Leveled logging
+- [ ] CLI parameters
+- [ ] SQLite cleanup entries
+- [ ] SQLite request
+
+
+Available Monitors
+------------------
+
+- [X] CPU
+- [X] RAM
+- [ ] Swap
+- [ ] Load Average
+- [ ] Network i/o
+- [ ] Storage i/o
+- [ ] Storage status
+- [ ] Battery
+- [ ] Screen backlight
+- [ ] Temperatures
+- [ ] Network settings (IP, hostname, SSID...)
+- [ ] Process count
+- [ ] Kernel version
+
+
 Features
 --------
 
 - [X] Server:
   - [X] Monitor items
   - [X] Save them in SQLite database
-  - [ ] TOML configuration file
-  - [ ] Customizable items
+  - [X] TOML configuration file
+  - [X] Customizable items
   - [ ] Customizable retention policy
   - [ ] Customizable saving interval
 - [X] Simple query client:

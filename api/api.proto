@@ -5,19 +5,25 @@ package api;
  Services
 */
 
-service Cpu {
+service Opale {
+	/*
+	   CPU
+	*/
     // Simple requests: ask for global cpu status.
-	rpc GetCpuInfo(StatusRequest) returns (CpuInfo) {}
-	rpc GetAdvancedCpuInfo(StatusRequest) returns (AdvancedCpuInfo) {}
+    rpc GetCpuUsedPercent(StatusRequest) returns (UsedPercent) {}
+    rpc GetCpuInfo(StatusRequest) returns (CpuInfo) {}
+    rpc GetAdvancedCpuInfo(StatusRequest) returns (AdvancedCpuInfo) {}
 
     // Advanced requets: ask per core/thread.
-	rpc GetCoreInfo(CoreStatusRequest) returns (CpuInfo) {}
-	rpc GetAdvancedCoreInfo(CoreStatusRequest) returns (AdvancedCpuInfo) {}
-}
+    rpc GetCoreInfo(CoreStatusRequest) returns (CpuInfo) {}
+    rpc GetAdvancedCoreInfo(CoreStatusRequest) returns (AdvancedCpuInfo) {}
 
-service Ram {
-	rpc GetRamInfo(StatusRequest) returns (RamInfo) {}
-	rpc GetAdvancedRamInfo(StatusRequest) returns (AdvancedRamInfo) {}
+	/*
+	   RAM
+	*/
+    rpc GetRamUsedPercent(StatusRequest) returns (UsedPercent) {}
+    rpc GetRamInfo(StatusRequest) returns (RamInfo) {}
+    rpc GetAdvancedRamInfo(StatusRequest) returns (AdvancedRamInfo) {}
 }
 
 /*
@@ -35,6 +41,10 @@ enum CpuType {
     LOGICAL_CORE = 2;
 }
 
+message UsedPercent {
+	double value = 1;
+}
+
 // If CpuType is COMBINED, id is ignored.
 message CoreStatusRequest {
     CpuType type = 1;
@@ -44,8 +54,8 @@ message CoreStatusRequest {
 message CpuInfo {
     bool available = 1;
     CpuType cpu_type = 2;
-	double used_percent = 3;
-	double frequency = 4;
+    double used_percent = 3;
+    double frequency = 4;
 }
 
 message AdvancedCpuInfo {
@@ -59,14 +69,14 @@ message AdvancedCpuInfo {
 /* RAM related messages. */
 
 message RamInfo {
-	double used_percent = 1;
-	uint64 total = 2;
-	uint64 used = 3;
+    double used_percent = 1;
+    uint64 total = 2;
+    uint64 used = 3;
 }
 
 message AdvancedRamInfo {
-	double used_percent = 1;
-	uint64 total = 2;
-	uint64 used = 3;
-	uint64 cached = 4;
+    double used_percent = 1;
+    uint64 total = 2;
+    uint64 used = 3;
+    uint64 cached = 4;
 }

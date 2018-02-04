@@ -4,7 +4,7 @@ import (
 	"errors"
 	"log"
 
-	"github.com/NSenaud/opale"
+	"github.com/NSenaud/opale/sensors"
 	"golang.org/x/net/context"
 )
 
@@ -14,11 +14,24 @@ type Server struct{}
 /*
  Cpu service
 */
+func (s *Server) GetCpuUsedPercent(ctx context.Context, in *StatusRequest) (*UsedPercent, error) {
+	log.Println("StatusRequest for CPU UsedPercent")
+
+	cpu, cores := sensors.GetCpu()
+	// TODO Check for error instead
+	if cpu != nil && cores != nil {
+		return &UsedPercent{
+			Value: cpu.UsedPercent,
+		}, nil
+	}
+
+	return nil, errors.New("Can't get CPU infos!")
+}
 
 func (s *Server) GetCpuInfo(ctx context.Context, in *StatusRequest) (*CpuInfo, error) {
 	log.Println("StatusRequest for CpuInfo")
 
-	cpu, cores := opale.GetCpu()
+	cpu, cores := sensors.GetCpu()
 	// TODO Check for error instead
 	if cpu != nil && cores != nil {
 		return &CpuInfo{
@@ -35,7 +48,7 @@ func (s *Server) GetCpuInfo(ctx context.Context, in *StatusRequest) (*CpuInfo, e
 func (s *Server) GetAdvancedCpuInfo(ctx context.Context, in *StatusRequest) (*AdvancedCpuInfo, error) {
 	log.Println("StatusRequest for AdvancedCpuInfo")
 
-	cpu, cores := opale.GetCpu()
+	cpu, cores := sensors.GetCpu()
 	// TODO Check for error instead
 	if cpu != nil && cores != nil {
 		return &AdvancedCpuInfo{
@@ -84,10 +97,24 @@ func (s *Server) GetAdvancedCoreInfo(ctx context.Context, in *CoreStatusRequest)
  Ram service.
 */
 
+func (s *Server) GetRamUsedPercent(ctx context.Context, in *StatusRequest) (*UsedPercent, error) {
+	log.Println("StatusRequest for RAM UsedPercent")
+
+	ram := sensors.GetRam()
+	// TODO Check for error instead
+	if ram != nil {
+		return &UsedPercent{
+			Value: ram.UsedPercent,
+		}, nil
+	}
+
+	return nil, errors.New("Can't get RAM infos!")
+}
+
 func (s *Server) GetRamInfo(ctx context.Context, in *StatusRequest) (*RamInfo, error) {
 	log.Println("StatusRequest for RamInfo")
 
-	ram := opale.GetMem()
+	ram := sensors.GetRam()
 	// TODO Check for error instead
 	if ram != nil {
 		return &RamInfo{
@@ -103,7 +130,7 @@ func (s *Server) GetRamInfo(ctx context.Context, in *StatusRequest) (*RamInfo, e
 func (s *Server) GetAdvancedRamInfo(ctx context.Context, in *StatusRequest) (*AdvancedRamInfo, error) {
 	log.Println("StatusRequest for AdvancedRamInfo")
 
-	ram := opale.GetMem()
+	ram := sensors.GetRam()
 	// TODO Check for error instead
 	if ram != nil {
 		return &AdvancedRamInfo{
