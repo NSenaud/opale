@@ -28,12 +28,12 @@ Linux version of [iStat][istat].
 Required Elements to Operate
 ----------------------------
 
-- [X] Data loading
-- [X] SQLite saving
-- [X] gRPC communication
-- [X] TOML configuration file
+- [x] Data loading
+- [x] SQLite saving
+- [x] gRPC communication
+- [x] TOML configuration file
 - [ ] Use XDG path
-- [ ] Leveled logging
+- [x] Leveled logging
 - [ ] CLI parameters
 - [ ] SQLite cleanup entries
 - [ ] SQLite request
@@ -42,8 +42,8 @@ Required Elements to Operate
 Available Monitors
 ------------------
 
-- [X] CPU
-- [X] RAM
+- [x] CPU
+- [x] RAM
 - [ ] Swap
 - [ ] Load Average
 - [ ] Network i/o
@@ -60,15 +60,15 @@ Available Monitors
 Features
 --------
 
-- [X] Server:
-  - [X] Monitor items
-  - [X] Save them in SQLite database
-  - [X] TOML configuration file
-  - [X] Customizable items
+- [x] Server:
+  - [x] Monitor items
+  - [x] Save them in SQLite database
+  - [x] TOML configuration file
+  - [x] Customizable items
   - [ ] Customizable retention policy
   - [ ] Customizable saving interval
-- [X] Simple query client:
-  - [ ] Query server for a given item
+- [x] Simple query client:
+  - [x] Query server for a given item
   - [ ] Customizable answer format
 - [ ] Curses client:
   - [ ] Show graph of item values
