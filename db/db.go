@@ -1,11 +1,10 @@
 package db
 
 import (
-	"log"
-
 	"github.com/NSenaud/opale/sensors"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	log "github.com/sirupsen/logrus"
 )
 
 func InsertIntoDb(cpu *sensors.Cpu, threads *[]sensors.LogicalCore, ram *sensors.Ram) {

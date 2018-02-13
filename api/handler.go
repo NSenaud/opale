@@ -2,9 +2,9 @@ package api
 
 import (
 	"errors"
-	"log"
 
 	"github.com/NSenaud/opale/sensors"
+	log "github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
 )
 

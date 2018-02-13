@@ -2,12 +2,12 @@ package client
 
 import (
 	"context"
-	"log"
 	"net"
 	"time"
 
 	"github.com/NSenaud/opale"
 	"github.com/NSenaud/opale/api"
+	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 )
 

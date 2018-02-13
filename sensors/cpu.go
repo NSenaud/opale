@@ -1,14 +1,16 @@
 package sensors
 
 import (
-	"log"
 	"time"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	"github.com/sirupsen/logrus"
 
 	"github.com/shirou/gopsutil/cpu"
 )
+
+var log = logrus.New()
 
 type Cpu struct {
 	gorm.Model
@@ -51,13 +53,20 @@ func GetCpu() (*Cpu, *[]LogicalCore) {
 
 	// Check threads/cores infos have all been returned.
 	if len(f) != threads {
-		log.Println("len(f) != threads:", len(f), "!=", threads)
+		log.WithFields(logrus.Fields{
+			"cpu_count":   threads,
+			"info_length": len(f),
+		}).Warn("len(f) != threads:")
 		log.Panic("Threads count does not match []InfoStat array size.")
 	}
 
 	// Check core usage have all been returned.
 	if len(p) != threads {
 		log.Println("len(p) != threads:", len(p), "!=", threads)
+		log.WithFields(logrus.Fields{
+			"cpu_count":         threads,
+			"percentage_length": len(p),
+		}).Warn("Can't get used percentage per core.")
 		// Avoid panicking due to last FIXME
 		// log.Panic("Threads count does not match []float64 percentage array size.")
 	}

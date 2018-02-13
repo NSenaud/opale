@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"net"
 	"os"
 	"os/signal"
@@ -11,6 +10,7 @@ import (
 	"github.com/NSenaud/opale/api"
 	"github.com/NSenaud/opale/db"
 	"github.com/NSenaud/opale/sensors"
+	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 )
 
@@ -24,6 +24,9 @@ func main() {
 		// FIXME Should use default settings instead
 		log.Fatal("Failed to read configuration file!")
 	}
+
+	// Load logger
+	LogInit(&config)
 
 	// Listener on Unix socket
 	lis, err := net.Listen("unix", config.Socket)
@@ -74,5 +77,13 @@ func main() {
 		// Sleep is not necessary yet since we already wait for a second in
 		// GetCpu(), however it will be necessary as soon as we will be async,
 		// and the interval will be setup in configuration file.
+	}
+}
+
+func LogInit(conf *opale.Config) {
+	if conf.Client.Debug {
+		log.SetLevel(log.DebugLevel)
+	} else {
+		log.SetLevel(log.WarnLevel)
 	}
 }

@@ -1,0 +1,14 @@
+# Unix socket file location.
+socket = "/tmp/opale.sock"
+# Monitor CPU and RAM.
+sensors = ['cpu', 'ram']
+
+[server]
+debug = false
+# Monitor data every 10 seconds.
+interval = 10
+# Keep full details during 1 day, hourly during 15 days, daily during 365.
+retention = [1 , 15, 365]
+
+[client]
+debug = false
