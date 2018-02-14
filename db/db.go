@@ -2,13 +2,19 @@ package db
 
 import (
 	"github.com/NSenaud/opale/sensors"
+	"github.com/Sirupsen/logrus"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	log "github.com/sirupsen/logrus"
+	"github.com/shibukawa/configdir"
 )
 
+const dbname = "opale.db"
+
+var log = logrus.New()
+
 func InsertIntoDb(cpu *sensors.Cpu, threads *[]sensors.LogicalCore, ram *sensors.Ram) {
-	db, err := gorm.Open("sqlite3", "./opale.db")
+	cache := GetCachePath()
+	db, err := gorm.Open("sqlite3", cache.Path+"/"+dbname)
 	if err != nil {
 		panic(err)
 	}
@@ -33,4 +39,14 @@ func InsertIntoDb(cpu *sensors.Cpu, threads *[]sensors.LogicalCore, ram *sensors
 	db.Last(&m)
 	log.Printf("Last values inserted:\n\tCPU: %.02f%s\n\tRAM:%.02f%s",
 		c.UsedPercent, "%", m.UsedPercent, "%")
+}
+
+func GetCachePath() (cache *configdir.Config) {
+	configDirs := configdir.New("TechnicalDebtFactory", "opale")
+	cache = configDirs.QueryCacheFolder()
+	log.WithFields(logrus.Fields{
+		"path": cache.Path,
+	}).Info("Cache directory.")
+
+	return
 }

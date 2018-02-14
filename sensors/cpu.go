@@ -3,9 +3,9 @@ package sensors
 import (
 	"time"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	"github.com/sirupsen/logrus"
 
 	"github.com/shirou/gopsutil/cpu"
 )

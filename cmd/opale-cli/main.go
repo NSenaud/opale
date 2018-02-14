@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/NSenaud/opale"
 	"github.com/NSenaud/opale/client"
-	log "github.com/sirupsen/logrus"
+	log "github.com/Sirupsen/logrus"
 )
 
 func main() {
@@ -11,8 +11,7 @@ func main() {
 	// ...
 
 	// Check config file
-	// TODO Load config from XDG path
-	config, err := opale.LoadConfig("config/example01.toml")
+	config, err := opale.LoadConfig()
 	if err != nil {
 		// FIXME Should use default settings instead
 		log.Fatal("Failed to read configuration file!")

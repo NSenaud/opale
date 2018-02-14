@@ -7,7 +7,7 @@ import (
 
 	"github.com/NSenaud/opale"
 	"github.com/NSenaud/opale/api"
-	log "github.com/sirupsen/logrus"
+	log "github.com/Sirupsen/logrus"
 	"google.golang.org/grpc"
 )
 

@@ -10,7 +10,7 @@ import (
 	"github.com/NSenaud/opale/api"
 	"github.com/NSenaud/opale/db"
 	"github.com/NSenaud/opale/sensors"
-	log "github.com/sirupsen/logrus"
+	log "github.com/Sirupsen/logrus"
 	"google.golang.org/grpc"
 )
 
@@ -19,7 +19,7 @@ func main() {
 	// ...
 
 	// Load config file
-	config, err := opale.LoadConfig("config/example01.toml")
+	config, err := opale.LoadConfig()
 	if err != nil {
 		// FIXME Should use default settings instead
 		log.Fatal("Failed to read configuration file!")
