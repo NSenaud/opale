@@ -5,11 +5,12 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/NSenaud/opale"
 	"github.com/NSenaud/opale/api"
-	"github.com/NSenaud/opale/db"
-	"github.com/NSenaud/opale/sensors"
+	"github.com/NSenaud/opale/sensors/cpu"
+	"github.com/NSenaud/opale/sensors/ram"
 	log "github.com/Sirupsen/logrus"
 	"google.golang.org/grpc"
 )
@@ -70,19 +71,21 @@ func main() {
 	// TODO Sleep (from config file).
 	// TODO Cleanup db (from config file).
 	for {
-		cpu, threads := sensors.GetCpu()
-		mem := sensors.GetRam()
+		cpu, _ := cpu.New()
+		ram := ram.New()
 
-		db.InsertIntoDb(cpu, threads, mem)
-		// Sleep is not necessary yet since we already wait for a second in
-		// GetCpu(), however it will be necessary as soon as we will be async,
-		// and the interval will be setup in configuration file.
+		// Save into database.
+		cpu.Save()
+		ram.Save()
+
+		time.Sleep(time.Duration(config.Server.Interval) * time.Second)
 	}
 }
 
 func LogInit(conf *opale.Config) {
-	if conf.Client.Debug {
+	if conf.Server.Debug {
 		log.SetLevel(log.DebugLevel)
+		log.Debug("Logging level set to debug.")
 	} else {
 		log.SetLevel(log.WarnLevel)
 	}

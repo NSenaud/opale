@@ -25,6 +25,14 @@ which are battle-tested and available for free. Think more of Opale as the
 Linux version of [iStat][istat].
 
 
+CLI tool
+--------
+
+```
+opale-cli get cpu --percentage
+```
+
+
 Required Elements to Operate
 ----------------------------
 
@@ -32,11 +40,11 @@ Required Elements to Operate
 - [x] SQLite saving
 - [x] gRPC communication
 - [x] TOML configuration file
-- [ ] Use XDG path
+- [x] Use XDG path
 - [x] Leveled logging
-- [ ] CLI parameters
+- [x] CLI parameters
 - [ ] SQLite cleanup entries
-- [ ] SQLite request
+- [x] SQLite request
 
 
 Available Monitors

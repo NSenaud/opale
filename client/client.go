@@ -7,9 +7,11 @@ import (
 
 	"github.com/NSenaud/opale"
 	"github.com/NSenaud/opale/api"
-	log "github.com/Sirupsen/logrus"
+	"github.com/Sirupsen/logrus"
 	"google.golang.org/grpc"
 )
+
+var log = logrus.New()
 
 type sensorType int
 type GetUsedPercentFunc func(api.OpaleClient, context.Context, *api.StatusRequest, ...grpc.CallOption) (*api.UsedPercent, error)
@@ -46,6 +48,12 @@ func IpcSubscribe(conf *opale.Config) (conn *grpc.ClientConn, client api.OpaleCl
 }
 
 func GetUsedPercent(client api.OpaleClient, sensor sensorType) float64 {
+	log.WithFields(logrus.Fields{
+		"client": client,
+		"sensor": sensor,
+	}).Debug("client.GetUsedPercent")
+
+	log.Debug("Get func from sensor name...")
 	if sensor < MaxSensorType {
 		f, ok := getUsedPercentFuncs[sensor]
 		if ok {

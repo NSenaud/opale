@@ -1,9 +1,9 @@
 SERVER_OUT := "bin/opale-server"
-CLIENT_OUT := "bin/opale-cli"
+CLIENT_OUT := "bin/opale"
 API_OUT := "api/api.pb.go"
 PKG := "github.com/NSenaud/opale"
-SERVER_PKG_BUILD := "${PKG}/cmd/opale-server"
-CLIENT_PKG_BUILD := "${PKG}/cmd/opale-cli"
+SERVER_PKG_BUILD := "${PKG}/opale-server"
+CLIENT_PKG_BUILD := "${PKG}/opale"
 PKG_LIST := $(shell go list ${PKG}/... | grep -v /vendor/)
 
 .PHONY: all api server cli

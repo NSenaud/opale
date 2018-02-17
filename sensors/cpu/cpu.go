@@ -1,8 +1,9 @@
-package sensors
+package cpu
 
 import (
 	"time"
 
+	"github.com/NSenaud/opale/db"
 	"github.com/Sirupsen/logrus"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
@@ -12,28 +13,66 @@ import (
 
 var log = logrus.New()
 
-type Cpu struct {
+type Cpu struct{}
+
+type CpuSnapshot struct {
 	gorm.Model
 	UsedPercent float64
 	Microcode   string
 	Cores       uint32
 }
 
-type PhysicalCore struct {
+type CoreSnapshot struct {
 	gorm.Model
 	CoreId      uint32
 	UsedPercent float64
 	Mhz         float64
 }
 
-type LogicalCore struct {
+type ThreadSnapshot struct {
 	gorm.Model
 	ThreadId    uint32
 	UsedPercent float64
 	Mhz         float64
 }
 
-func GetCpu() (*Cpu, *[]LogicalCore) {
+func (s *CpuSnapshot) Save() {
+	db, err := gorm.Open("sqlite3", db.GetDbPath())
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
+
+	// Migrate the schema if necessary
+	db.AutoMigrate(&CpuSnapshot{})
+
+	// Create
+	db.Create(s)
+
+	// TODO if debug
+	// Read last input
+	var c CpuSnapshot
+	db.Last(&c)
+	log.Printf("Inserted CPU value: %.02f%s", c.UsedPercent, "%")
+}
+
+//func (c *Cpu) Last() (cpu *CpuSnapshot) {
+func Last() *CpuSnapshot {
+	log.Debug("Opening connection with database...")
+	db, err := gorm.Open("sqlite3", db.GetDbPath())
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
+
+	log.Debug("Requesting last cpu entry...")
+	var cpu CpuSnapshot
+	db.Last(&cpu)
+	log.Debug("Done.")
+	return &cpu
+}
+
+func New() (*CpuSnapshot, *[]ThreadSnapshot) {
 	c, err := cpu.Percent(time.Second, true)
 	if err != nil {
 		panic(err)
@@ -71,9 +110,9 @@ func GetCpu() (*Cpu, *[]LogicalCore) {
 		// log.Panic("Threads count does not match []float64 percentage array size.")
 	}
 
-	logicals := make([]LogicalCore, threads)
+	logicals := make([]ThreadSnapshot, threads)
 	for i := 0; i < threads; i++ {
-		logicals[i] = LogicalCore{
+		logicals[i] = ThreadSnapshot{
 			ThreadId: uint32(i),
 			// FIXME Cf above
 			// UsedPercent: p[i],
@@ -82,7 +121,7 @@ func GetCpu() (*Cpu, *[]LogicalCore) {
 		}
 	}
 
-	cpu := Cpu{
+	cpu := CpuSnapshot{
 		UsedPercent: c[0],
 		Microcode:   f[0].Microcode,
 		Cores:       uint32(threads),

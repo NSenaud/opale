@@ -1,4 +1,4 @@
-package sensors_test
+package ram_test
 
 import (
 	"testing"

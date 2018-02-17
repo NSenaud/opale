@@ -3,10 +3,13 @@ package api
 import (
 	"errors"
 
-	"github.com/NSenaud/opale/sensors"
-	log "github.com/Sirupsen/logrus"
+	"github.com/NSenaud/opale/sensors/cpu"
+	"github.com/NSenaud/opale/sensors/ram"
+	"github.com/Sirupsen/logrus"
 	"golang.org/x/net/context"
 )
+
+var log = logrus.New()
 
 // Server represents the gRPC server
 type Server struct{}
@@ -15,11 +18,11 @@ type Server struct{}
  Cpu service
 */
 func (s *Server) GetCpuUsedPercent(ctx context.Context, in *StatusRequest) (*UsedPercent, error) {
-	log.Println("StatusRequest for CPU UsedPercent")
+	log.Debug("StatusRequest for CPU UsedPercent")
 
-	cpu, cores := sensors.GetCpu()
+	cpu := cpu.Last()
 	// TODO Check for error instead
-	if cpu != nil && cores != nil {
+	if cpu != nil {
 		return &UsedPercent{
 			Value: cpu.UsedPercent,
 		}, nil
@@ -29,9 +32,9 @@ func (s *Server) GetCpuUsedPercent(ctx context.Context, in *StatusRequest) (*Use
 }
 
 func (s *Server) GetCpuInfo(ctx context.Context, in *StatusRequest) (*CpuInfo, error) {
-	log.Println("StatusRequest for CpuInfo")
+	log.Debug("StatusRequest for CpuInfo")
 
-	cpu, cores := sensors.GetCpu()
+	cpu, cores := cpu.New()
 	// TODO Check for error instead
 	if cpu != nil && cores != nil {
 		return &CpuInfo{
@@ -46,9 +49,9 @@ func (s *Server) GetCpuInfo(ctx context.Context, in *StatusRequest) (*CpuInfo, e
 }
 
 func (s *Server) GetAdvancedCpuInfo(ctx context.Context, in *StatusRequest) (*AdvancedCpuInfo, error) {
-	log.Println("StatusRequest for AdvancedCpuInfo")
+	log.Debug("StatusRequest for AdvancedCpuInfo")
 
-	cpu, cores := sensors.GetCpu()
+	cpu, cores := cpu.New()
 	// TODO Check for error instead
 	if cpu != nil && cores != nil {
 		return &AdvancedCpuInfo{
@@ -64,7 +67,7 @@ func (s *Server) GetAdvancedCpuInfo(ctx context.Context, in *StatusRequest) (*Ad
 }
 
 func (s *Server) GetCoreInfo(ctx context.Context, in *CoreStatusRequest) (*CpuInfo, error) {
-	log.Println("CoreStatusRequest for CpuInfo")
+	log.Debug("CoreStatusRequest for CpuInfo")
 
 	switch in.Type {
 	case CpuType_COMBINED:
@@ -79,7 +82,7 @@ func (s *Server) GetCoreInfo(ctx context.Context, in *CoreStatusRequest) (*CpuIn
 }
 
 func (s *Server) GetAdvancedCoreInfo(ctx context.Context, in *CoreStatusRequest) (*AdvancedCpuInfo, error) {
-	log.Println("CoreStatusRequest for AdvancedCpuInfo")
+	log.Debug("CoreStatusRequest for AdvancedCpuInfo")
 
 	switch in.Type {
 	case CpuType_COMBINED:
@@ -98,9 +101,9 @@ func (s *Server) GetAdvancedCoreInfo(ctx context.Context, in *CoreStatusRequest)
 */
 
 func (s *Server) GetRamUsedPercent(ctx context.Context, in *StatusRequest) (*UsedPercent, error) {
-	log.Println("StatusRequest for RAM UsedPercent")
+	log.Debug("StatusRequest for RAM UsedPercent")
 
-	ram := sensors.GetRam()
+	ram := ram.Last()
 	// TODO Check for error instead
 	if ram != nil {
 		return &UsedPercent{
@@ -112,9 +115,9 @@ func (s *Server) GetRamUsedPercent(ctx context.Context, in *StatusRequest) (*Use
 }
 
 func (s *Server) GetRamInfo(ctx context.Context, in *StatusRequest) (*RamInfo, error) {
-	log.Println("StatusRequest for RamInfo")
+	log.Debug("StatusRequest for RamInfo")
 
-	ram := sensors.GetRam()
+	ram := ram.Last()
 	// TODO Check for error instead
 	if ram != nil {
 		return &RamInfo{
@@ -128,9 +131,9 @@ func (s *Server) GetRamInfo(ctx context.Context, in *StatusRequest) (*RamInfo, e
 }
 
 func (s *Server) GetAdvancedRamInfo(ctx context.Context, in *StatusRequest) (*AdvancedRamInfo, error) {
-	log.Println("StatusRequest for AdvancedRamInfo")
+	log.Debug("StatusRequest for AdvancedRamInfo")
 
-	ram := sensors.GetRam()
+	ram := ram.Last()
 	// TODO Check for error instead
 	if ram != nil {
 		return &AdvancedRamInfo{
