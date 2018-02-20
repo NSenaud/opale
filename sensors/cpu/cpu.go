@@ -53,7 +53,10 @@ func (s *CpuSnapshot) Save() {
 	// Read last input
 	var c CpuSnapshot
 	db.Last(&c)
-	log.Printf("Inserted CPU value: %.02f%s", c.UsedPercent, "%")
+	log.WithFields(logrus.Fields{
+		"%":         c.UsedPercent,
+		"Microcode": c.Microcode,
+	}).Info("Inserted CPU values.")
 }
 
 //func (c *Cpu) Last() (cpu *CpuSnapshot) {

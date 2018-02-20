@@ -21,7 +21,7 @@ func GetCachePath() (cache *configdir.Config) {
 	cache = configDirs.QueryCacheFolder()
 	log.WithFields(logrus.Fields{
 		"path": cache.Path,
-	}).Info("Cache directory.")
+	}).Debug("Cache directory.")
 
 	return
 }

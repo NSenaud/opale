@@ -34,7 +34,12 @@ func (s *RamSnapshot) Save() {
 	// Read last input
 	var r RamSnapshot
 	db.Last(&r)
-	log.Printf("Inserted RAM value: %.02f%s", r.UsedPercent, "%")
+	log.WithFields(logrus.Fields{
+		"%":      r.UsedPercent,
+		"Total":  r.Total,
+		"Used":   r.Used,
+		"Cached": r.Cached,
+	}).Info("Inserted RAM values.")
 }
 
 func Last() *RamSnapshot {

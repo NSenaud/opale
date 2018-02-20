@@ -11,9 +11,12 @@ import (
 	"github.com/NSenaud/opale/api"
 	"github.com/NSenaud/opale/sensors/cpu"
 	"github.com/NSenaud/opale/sensors/ram"
-	log "github.com/Sirupsen/logrus"
+	"github.com/NSenaud/opale/sensors/temp"
+	"github.com/Sirupsen/logrus"
 	"google.golang.org/grpc"
 )
+
+var log = logrus.New()
 
 func main() {
 	// TODO Check params
@@ -73,10 +76,17 @@ func main() {
 	for {
 		cpu, _ := cpu.New()
 		ram := ram.New()
+		temps := temp.New()
 
 		// Save into database.
 		cpu.Save()
 		ram.Save()
+		for _, temp := range *temps {
+			temp.Save()
+		}
+
+		//name := "pch_skylake"
+		//log.Error("Last: %f", temp.Last(&name).CelciusDegrees)
 
 		time.Sleep(time.Duration(config.Server.Interval) * time.Second)
 	}
@@ -84,9 +94,9 @@ func main() {
 
 func LogInit(conf *opale.Config) {
 	if conf.Server.Debug {
-		log.SetLevel(log.DebugLevel)
+		logrus.SetLevel(logrus.DebugLevel)
 		log.Debug("Logging level set to debug.")
 	} else {
-		log.SetLevel(log.WarnLevel)
+		logrus.SetLevel(logrus.WarnLevel)
 	}
 }
